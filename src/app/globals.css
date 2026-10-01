@@ -1,0 +1,201 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #f8f5ef;
+  --color-sand: #efe9df;
+  --color-ink: #171411;
+  --color-ink-soft: #6d665f;
+  --color-gold: #b89b62;
+  --color-champagne: #d8c39b;
+  --color-paper: #ffffff;
+
+  /* Verde de ação: sinaliza clareza e avanço, sem quebrar a paleta */
+  --color-forest: #1f3a2e;
+  --color-forest-soft: #2c5343;
+  --color-forest-deep: #16281f;
+
+  --font-display: var(--font-playfair), "Playfair Display", Georgia, serif;
+  --font-sans: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
+
+  --spacing-section: 6.5rem;
+
+  --tracking-label: 0.22em;
+
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    letter-spacing: -0.005em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--color-champagne);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+@utility hairline {
+  background-color: color-mix(in srgb, var(--color-gold) 30%, transparent);
+}
+
+/* ---------- Reveal on scroll ---------- */
+.reveal {
+  opacity: 1;
+}
+
+.reveal[data-state="pending"] {
+  opacity: 0;
+}
+
+.reveal[data-state="visible"] {
+  animation: editorial-arrival 650ms var(--ease-editorial) var(--reveal-delay, 0ms) both;
+}
+
+@keyframes editorial-arrival {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-banner {
+  animation: banner-unveil 950ms var(--ease-editorial) both;
+}
+
+@keyframes banner-unveil {
+  from { opacity: 0.65; clip-path: inset(0 0 5% 0); }
+  to { opacity: 1; clip-path: inset(0); }
+}
+
+.floating-card {
+  transition: translate 350ms var(--ease-editorial), box-shadow 350ms var(--ease-editorial);
+}
+
+.cta-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 25%, rgb(255 255 255 / 16%) 48%, transparent 72%);
+  transform: translateX(-110%);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .floating-card:hover {
+    translate: 0 -5px;
+    box-shadow: 0 20px 40px -24px rgb(23 20 17 / 30%);
+  }
+
+  .cta-button:hover::after {
+    animation: button-sheen 650ms var(--ease-editorial) both;
+  }
+}
+
+@keyframes button-sheen {
+  to { transform: translateX(110%); }
+}
+
+.floating-access {
+  transition: opacity 300ms ease, translate 400ms var(--ease-editorial), visibility 400ms;
+}
+
+.floating-access[data-visible="false"] {
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 16px;
+}
+
+.reveal-media {
+  transform: scale(1.04);
+  transition: transform 1.1s var(--ease-editorial);
+}
+
+.group:hover .reveal-media,
+.reveal-media-wrap:hover .reveal-media {
+  transform: scale(1.075);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal[data-state],
+  .hero-banner,
+  .reveal-media,
+  .group:hover .reveal-media,
+  .reveal-media-wrap:hover .reveal-media {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+    clip-path: none;
+  }
+
+  .group\/cta,
+  .group\/cta:hover,
+  .group\/cta svg {
+    transform: none;
+    transition: none;
+    translate: none;
+  }
+
+  .cta-button::after {
+    display: none;
+  }
+
+  .floating-card,
+  .floating-card:hover,
+  .floating-access {
+    translate: none;
+    transition: none;
+  }
+}
